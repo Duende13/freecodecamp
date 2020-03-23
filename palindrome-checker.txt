@@ -1,0 +1,19 @@
+function palindrome(str) {
+  let cleanStr = (str.replace(/[^a-zA-Z0-9]+/gm,"")).toUpperCase();
+  let inverseArray = [];
+  for(let i= cleanStr.length -1; i >= 0; i--){
+    if(cleanStr[i])
+    inverseArray.push(cleanStr[i]);
+  }
+  let inverseStr = inverseArray.join("");
+  console.log(inverseStr + " - " + cleanStr);
+  if( inverseStr == cleanStr){
+    return true;
+  } else {
+    return false;
+  }
+}
+
+
+
+palindrome("A man, a plan, a canal. Panama");
