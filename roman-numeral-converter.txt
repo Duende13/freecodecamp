@@ -1,0 +1,51 @@
+function convertToRoman(num) {
+    let numbers = [{roman:"M", latin : 1000}, 
+	{roman :"C", latin : 100},{roman :"X", latin : 10},{roman :"I", latin : 1}];
+    let numbers5 = [{roman :"D", latin : 500},{roman :"L", latin : 50},	{roman :"V", latin : 5}];
+
+    let remainder = num;
+    let romanNum = numbers.map (function(number, index)  {        
+        let quotient = Math.floor(remainder/number.latin);
+        remainder = remainder % number.latin;
+        let latinNumbers;
+        if(quotient == 9){
+            latinNumbers = number.roman + numbers[index - 1].roman;
+        } else if(quotient < 9 && quotient >= 5){
+            let noFivers = quotient - 5;
+            latinNumbers =  numbers5[index - 1].roman + number.roman.repeat(noFivers);
+        } else if(quotient == 4){
+            latinNumbers = number.roman + numbers5[index - 1].roman;
+        } else {
+            latinNumbers = number.roman.repeat(quotient);
+        }
+        return latinNumbers;
+    });
+
+ return romanNum.join("");
+}
+convertToRoman(2);// should return "II".
+convertToRoman(3);// should return "III".
+convertToRoman(4);// should return "IV".
+convertToRoman(5);// should return "V".
+convertToRoman(9);// should return "IX".
+convertToRoman(12);// should return "XII".
+convertToRoman(16);// should return "XVI".
+convertToRoman(29);// should return "XXIX".
+convertToRoman(44);// should return "XLIV".
+convertToRoman(45);// should return "XLV"
+convertToRoman(68);// should return "LXVIII"
+convertToRoman(83);// should return "LXXXIII"
+convertToRoman(97);// should return "XCVII"
+convertToRoman(99);// should return "XCIX"
+convertToRoman(400);// should return "CD"
+convertToRoman(500);// should return "D"
+convertToRoman(501);// should return "DI"
+convertToRoman(649);// should return "DCXLIX"
+convertToRoman(798);// should return "DCCXCVIII"
+convertToRoman(891);// should return "DCCCXCI"
+convertToRoman(1000);// should return "M"
+convertToRoman(1004);// should return "MIV"
+convertToRoman(1006);// should return "MVI"
+convertToRoman(1023);// should return "MXXIII"
+convertToRoman(2014);// should return "MMXIV"
+convertToRoman(3999);// should return "MMMCMXCIX"
