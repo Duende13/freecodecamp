@@ -1,0 +1,31 @@
+function spinalCase(str) {
+  var nbspStr = str.split(/[^a-zA-Z]+/g);
+  let arr = [];
+  // let sss = nbspStr.map(word => word.split(/([A-Z])/g));
+  // console.log(sss)
+  for(let i = 0; i < nbspStr.length; i++){
+    if(nbspStr[i].match(/([a-z][A-Z])/g)){
+      let allTogether = nbspStr[i].split(/([A-Z])/g);
+      for(let j=0; j < allTogether.length;j++){
+        if(allTogether[j])
+        if(/^[A-Z]/g.test(allTogether[j])){
+          arr.push(allTogether[j].concat(allTogether[j+1]));
+          j++;
+        } else {
+          arr.push(allTogether[j]);
+        }
+      }
+
+    } else {
+      arr.push([nbspStr[i]]);
+    }
+  }
+  let arrReturn = arr.join(",").toLowerCase().replace(/,/g,"-");
+  return arrReturn;
+}
+
+// spinalCase('This Is Spinal Tap');
+spinalCase("thisIsSpinalTap") ; // should return "this-is-spinal-tap".
+spinalCase("The_Andy_Griffith_Show"); // should return "the-andy-griffith-show".
+spinalCase("Teletubbies say Eh-oh");  // should return "teletubbies-say-eh-oh".
+spinalCase("AllThe-small Things");// should return "all-the-small-things".
