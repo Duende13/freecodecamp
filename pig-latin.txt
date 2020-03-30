@@ -1,0 +1,32 @@
+function translatePigLatin(str) {
+  let regExp = RegExp(/[aeiou]/g);
+  let sufix = str[0].match(regExp) ? 'way' : 'ay';
+  let newStrIndex = str.search(regExp);
+  let newStr = str.slice(0,newStrIndex);
+  if(str.match(regExp))
+    return str.replace(newStr,'').concat(newStr,sufix);
+  else 
+    return str.concat(sufix);
+
+}
+
+translatePigLatin("rhythm");
+
+//Intermediate Algorithm Scripting: Pig Latin
+// Pig Latin is a way of altering English Words. The rules are as follows:
+// - If a word begins with a consonant, take the first consonant or consonant cluster, move it to the end of the word, and add "ay" to it.
+// - If a word begins with a vowel, just add "way" at the end.
+// Translate the provided string to Pig Latin. Input strings are guaranteed to be English words in all lowercase.
+// translatePigLatin("california") should return "aliforniacay".
+// Passed
+// translatePigLatin("paragraphs") should return "aragraphspay".
+// Passed
+// translatePigLatin("glove") should return "oveglay".
+// Passed
+// translatePigLatin("algorithm") should return "algorithmway".
+// Passed
+// translatePigLatin("eight") should return "eightway".
+// Passed
+// Should handle words where the first vowel comes in the middle of the word. translatePigLatin("schwartz") should return "artzschway".
+// Passed
+// Should handle words without vowels. translatePigLatin("rhythm") should return "rhythmay".
