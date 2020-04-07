@@ -1,0 +1,94 @@
+function checkCashRegister(price, cash, cid) {
+  var currencyAmount = {"PENNY":0.01,"NICKEL":0.05,"DIME":0.10,"QUARTER":0.25,"ONE":1,"FIVE":5,"TEN":10,"TWENTY":20,"ONE HUNDRED":100};
+  var changeAmount = [];
+  var change = Number(cash - price).toFixed(2);  
+  var register = cid.filter(x=>x[1]>0).map(function (arr) {
+  return arr[1];
+}).reduce((sum,amount)=>sum+=amount);
+
+  // Money from Big to small
+  for(let i=cid.length-1;i>=0;i--){
+    var currency = 0;   
+    var rest = cid[i][1];
+    while ((change - currencyAmount[cid[i][0]] >= 0) && ( rest > 0)){
+      currency = currency + currencyAmount[cid[i][0]];
+      change = Number(change - currencyAmount[cid[i][0]]).toFixed(2);
+      rest = rest - currencyAmount[cid[i][0]];
+    }  
+    if(currency > 0)
+      changeAmount.push([cid[i][0],currency]);   
+  } 
+var totalamount = changeAmount.reduce(
+    function(acc, curr) {
+      acc.total += curr[1];
+      acc[curr[0]] = curr[1];
+      return acc;
+    },
+    { total: 0 }
+  );
+  var totalamount = changeAmount.filter(x=>x[1]>0).map(function (arr) {
+  return arr[1];
+}).reduce((sum,amount)=>Number(sum+=amount).toFixed(2));
+
+  // Insufficient Funds
+  if((totalamount < (cash - price))||(register < (cash - price)) ){
+    return {status: "INSUFFICIENT_FUNDS",change:[]};
+  } 
+  // When the register amount is the same as change
+  if(Number(register).toFixed(2) === Number(totalamount).toFixed(2)){
+    return {status: "CLOSED",change:cid};
+  }  
+
+  return {"status": "OPEN", "change": changeAmount};
+}
+
+checkCashRegister(3.26, 100, [["PENNY", 1.01], ["NICKEL", 2.05], ["DIME", 3.1], ["QUARTER", 4.25], ["ONE", 90], ["FIVE", 55], ["TEN", 20], ["TWENTY", 60], ["ONE HUNDRED", 100]]) //should return {status: "OPEN", change: [["TWENTY", 60], ["TEN", 20], ["FIVE", 15], ["ONE", 1], ["QUARTER", 0.5], ["DIME", 0.2], ["PENNY", 0.04]]}.
+
+
+// JavaScript Algorithms and Data Structures Projects: Cash Register
+// Design a cash register drawer function checkCashRegister() that accepts purchase price as the first argument (price), payment as the second argument (cash), and cash-in-drawer (cid) as the third argument.
+
+// cid is a 2D array listing available currency.
+
+// The checkCashRegister() function should always return an object with a status key and a change key.
+
+// Return {status: "INSUFFICIENT_FUNDS", change: []} if cash-in-drawer is less than the change due, or if you cannot return the exact change.
+
+// Return {status: "CLOSED", change: [...]} with cash-in-drawer as the value for the key change if it is equal to the change due.
+
+// Otherwise, return {status: "OPEN", change: [...]}, with the change due in coins and bills, sorted in highest to lowest order, as the value of the change key.
+
+// Currency Unit	Amount
+// Penny	$0.01 (PENNY)
+// Nickel	$0.05 (NICKEL)
+// Dime	$0.1 (DIME)
+// Quarter	$0.25 (QUARTER)
+// Dollar	$1 (DOLLAR)
+// Five Dollars	$5 (FIVE)
+// Ten Dollars	$10 (TEN)
+// Twenty Dollars	$20 (TWENTY)
+// One-hundred Dollars	$100 (ONE HUNDRED)
+// See below for an example of a cash-in-drawer array:
+
+// [
+//   ["PENNY", 1.01],
+//   ["NICKEL", 2.05],
+//   ["DIME", 3.1],
+//   ["QUARTER", 4.25],
+//   ["ONE", 90],
+//   ["FIVE", 55],
+//   ["TEN", 20],
+//   ["TWENTY", 60],
+//   ["ONE HUNDRED", 100]
+// ]
+
+// checkCashRegister(19.5, 20, [["PENNY", 1.01], ["NICKEL", 2.05], ["DIME", 3.1], ["QUARTER", 4.25], ["ONE", 90], ["FIVE", 55], ["TEN", 20], ["TWENTY", 60], ["ONE HUNDRED", 100]]);
+
+// checkCashRegister(19.5, 20, [["PENNY", 1.01], ["NICKEL", 2.05], ["DIME", 3.1], ["QUARTER", 4.25], ["ONE", 90], ["FIVE", 55], ["TEN", 20], ["TWENTY", 60], ["ONE HUNDRED", 100]]) should return an object.
+// Passed
+// checkCashRegister(19.5, 20, [["PENNY", 1.01], ["NICKEL", 2.05], ["DIME", 3.1], ["QUARTER", 4.25], ["ONE", 90], ["FIVE", 55], ["TEN", 20], ["TWENTY", 60], ["ONE HUNDRED", 100]]) should return {status: "OPEN", change: [["QUARTER", 0.5]]}.
+// checkCashRegister(3.26, 100, [["PENNY", 1.01], ["NICKEL", 2.05], ["DIME", 3.1], ["QUARTER", 4.25], ["ONE", 90], ["FIVE", 55], ["TEN", 20], ["TWENTY", 60], ["ONE HUNDRED", 100]]) should return {status: "OPEN", change: [["TWENTY", 60], ["TEN", 20], ["FIVE", 15], ["ONE", 1], ["QUARTER", 0.5], ["DIME", 0.2], ["PENNY", 0.04]]}.
+// checkCashRegister(19.5, 20, [["PENNY", 0.01], ["NICKEL", 0], ["DIME", 0], ["QUARTER", 0], ["ONE", 0], ["FIVE", 0], ["TEN", 0], ["TWENTY", 0], ["ONE HUNDRED", 0]]) should return {status: "INSUFFICIENT_FUNDS", change: []}.
+// checkCashRegister(19.5, 20, [["PENNY", 0.01], ["NICKEL", 0], ["DIME", 0], ["QUARTER", 0], ["ONE", 1], ["FIVE", 0], ["TEN", 0], ["TWENTY", 0], ["ONE HUNDRED", 0]]) should return {status: "INSUFFICIENT_FUNDS", change: []}.
+// checkCashRegister(19.5, 20, [["PENNY", 0.5], ["NICKEL", 0], ["DIME", 0], ["QUARTER", 0], ["ONE", 0], ["FIVE", 0], ["TEN", 0], ["TWENTY", 0], ["ONE HUNDRED", 0]]) should return {status: "CLOSED", change: [["PENNY", 0.5], ["NICKEL", 0], ["DIME", 0], ["QUARTER", 0], ["ONE", 0], ["FIVE", 0], ["TEN", 0], ["TWENTY", 0], ["ONE HUNDRED", 0]]}.
+
